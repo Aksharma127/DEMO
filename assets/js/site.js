@@ -97,8 +97,8 @@
   if (sub && subSecs.length){
     sub.innerHTML = '<div class="wrap"><span class="lbl">On this page</span>' + subSecs.map(function(s, i){
       return '<a href="#' + s.id + '"><b>0' + (i + 1) + '</b>' + s.dataset.subnav + '</a>';
-    }).join('') + '</div><span class="prog" aria-hidden="true"></span>';
-    var sLinks = sub.querySelectorAll('a'), sWrap = sub.querySelector('.wrap'), prog = sub.querySelector('.prog');
+    }).join('') + '</div>';
+    var sLinks = sub.querySelectorAll('a'), sWrap = sub.querySelector('.wrap');
     var lastSub = -1;
     var subTick = function(){
       var line = sub.getBoundingClientRect().bottom + 24, best = -1;
@@ -111,9 +111,6 @@
         }
         lastSub = best;
       }
-      var first = subSecs[0].getBoundingClientRect().top + scrollY - line;
-      var end = document.documentElement.scrollHeight - innerHeight;
-      prog.style.setProperty('--p', Math.max(0, Math.min(1, (scrollY - first) / Math.max(1, end - first))).toFixed(3));
     };
     addEventListener('scroll', function(){ requestAnimationFrame(subTick); }, { passive: true });
     addEventListener('resize', subTick);

@@ -34,7 +34,7 @@ a{color:inherit}
 .num{font-variant-numeric:tabular-nums}
 /* content uses the whole screen up to 1760px; side gutters grow with the window instead of a fixed narrow column */
 .wrap{--gut:clamp(16px,3vw,32px);max-width:1760px;margin:0 auto;padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
-@media (min-width:1280px){.wrap{--gut:clamp(56px,4.4vw,88px)}}
+@media (min-width:1280px){.wrap{--gut:clamp(64px,5vw,96px)}}
 .skip{position:absolute;left:12px;top:-60px;z-index:60;padding:10px 14px;border-radius:8px;background:var(--orange);color:#000;font-weight:700;text-decoration:none;transition:top .15s}
 .skip:focus{top:12px}
 kbd{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:5px;border:1px solid currentColor;border-bottom-width:2px;font:600 12px/1 var(--f-mono);opacity:.85}
@@ -108,7 +108,7 @@ kbd{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 
 .srail a[aria-current="true"] i{width:24px;opacity:1;background:var(--orange)}
 .srail a span{position:absolute;right:40px;top:50%;transform:translate(6px,-50%);padding:4px 9px;border-radius:6px;background:var(--stage);color:var(--on-stage);border:1px solid var(--stage-line);font-size:12px;font-weight:600;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s,transform .2s var(--ease)}
 .srail a:hover span,.srail a:focus-visible span{opacity:1;transform:translate(0,-50%)}
-.srail .count{display:block;margin-top:8px;text-align:right;font:600 11px/1 var(--f-mono);opacity:.6}
+.srail .count{display:none;margin-top:8px;text-align:right;font:600 11px/1 var(--f-mono);opacity:.6}
 .srail{color:var(--on-stage)}
 .srail[data-tone="light"]{color:var(--ink)}
 .srail[data-tone="orange"]{color:#000}
@@ -126,7 +126,6 @@ kbd{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 
 .subnav a[aria-current="true"]{color:var(--ink)}
 .subnav a[aria-current="true"] b{color:var(--orange-ink)}
 .subnav a[aria-current="true"]::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:2px;border-radius:1px;background:var(--orange)}
-.subnav .prog{position:absolute;left:0;bottom:-1px;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(var(--p,0));background:var(--ink);opacity:.12}
 
 /* reveal on scroll (only when JS runs, see the inline class in each page head) */
 .js [data-reveal]{opacity:0;transform:translateY(14px);transition:opacity .6s ease-out,transform .7s var(--ease);transition-delay:var(--d,0ms)}
@@ -166,3 +165,5 @@ kbd{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 
   .js [data-reveal]{opacity:1;transform:none}
   @view-transition{navigation:none}
 }
+
+@media (min-width:1700px){.srail .count{display:block}}
