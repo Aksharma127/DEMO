@@ -32,7 +32,9 @@ a{color:inherit}
 ::selection{background:var(--orange);color:#000}
 :focus-visible{outline:2px solid var(--orange);outline-offset:2px}
 .num{font-variant-numeric:tabular-nums}
-.wrap{max-width:1320px;margin:0 auto;padding-left:max(clamp(16px,3vw,32px),env(safe-area-inset-left,0px));padding-right:max(clamp(16px,3vw,32px),env(safe-area-inset-right,0px))}
+/* content uses the whole screen up to 1760px; side gutters grow with the window instead of a fixed narrow column */
+.wrap{--gut:clamp(16px,3vw,32px);max-width:1760px;margin:0 auto;padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
+@media (min-width:1280px){.wrap{--gut:clamp(56px,4.4vw,88px)}}
 .skip{position:absolute;left:12px;top:-60px;z-index:60;padding:10px 14px;border-radius:8px;background:var(--orange);color:#000;font-weight:700;text-decoration:none;transition:top .15s}
 .skip:focus{top:12px}
 kbd{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:5px;border:1px solid currentColor;border-bottom-width:2px;font:600 12px/1 var(--f-mono);opacity:.85}
