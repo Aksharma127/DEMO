@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reorder demo · Corridor Seven</title>
+<meta name="description" content="A working demo of WhatsApp reorder reminders timed to Corridor Seven's roast days, so customers reorder before their coffee runs out.">
+<meta name="theme-color" content="#000000">
+<meta name="author" content="Akshit Sharma">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Corridor Seven reorders, a working concept">
+<meta property="og:title" content="Reorder demo · Corridor Seven">
+<meta property="og:description" content="A working demo of WhatsApp reorder reminders timed to Corridor Seven's roast days, so customers reorder before their coffee runs out.">
+<meta property="og:image" content="/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Know when every customer will run out of coffee. A working demo for Corridor Seven.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/archivo-latin-wdth.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/demo.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu"><span></span></button>
+    <a class="mark" href="/">Corridor Seven</a>
+    <span class="concept">Concept<span class="by"> by Akshit Sharma</span></span>
+    <nav class="hnav" aria-label="Pages"><a href="/" aria-current="page">Live demo</a><a href="/dashboard">Roastery dashboard</a><a href="/dev">Under the hood</a></nav>
+    <span class="top-sp"></span>
+    <a class="btn btn-line" href="/#ask">Book a call</a>
+  </div>
+</header>
+
+<main id="main">
+<section class="stage" id="stage" data-view="phone" aria-label="Demo" data-rail="The demo" data-tone="dark">
+  <div class="wrap">
+    <div class="intro">
+      <h1>Know when every customer will run out of coffee.</h1>
+      <p>This is Riya's week after a 250 g bag of Ratnagiri Peaberry arrives. <b>Reply as Riya</b> in her chat, then <b>move the days forward</b> and watch what the roastery sees.</p>
+    </div>
+
+    <div class="week-head">
+      <ol class="guide" id="guide" aria-label="How to play the demo">
+        <li><span class="g-n" aria-hidden="true"><b>1</b></span><span class="g-l">Reply as Riya</span><span class="g-s">Reply</span></li>
+        <li><span class="g-n" aria-hidden="true"><b>2</b></span><span class="g-l">Move to the next day</span><span class="g-s">Next day</span></li>
+        <li><span class="g-n" aria-hidden="true"><b>3</b></span><span class="g-l">See how the week ends</span><span class="g-s">Result</span></li>
+      </ol>
+      <div class="controls">
+        <button class="btn btn-quiet" id="restart" type="button" aria-label="Start over"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lbl">Start over</span></button>
+        <button class="btn btn-quiet" id="skip" type="button">Skip quiet days</button>
+        <button class="btn btn-next" id="next" type="button">Next day</button>
+      </div>
+    </div>
+    <div class="hint-row">
+      <p class="hint" id="hint" aria-live="polite"></p>
+      <span class="keys-hint" aria-hidden="true">Keys <kbd>→</kbd> next day <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> reply</span>
+    </div>
+    <div class="days" id="days" role="list" aria-label="Days of Riya's week"></div>
+    <div id="result"></div>
+
+    <div class="switch" role="group" aria-label="Choose view">
+      <button type="button" data-view="phone" aria-pressed="true">Riya's phone</button>
+      <button type="button" data-view="roastery" aria-pressed="false">Roastery view <span class="dot" id="roastDot" hidden></span></button>
+    </div>
+
+    <div class="panels">
+      <div class="phone-col">
+        <div class="contacts" role="group" aria-label="Whose phone">
+          <button class="contact" type="button" data-tab="riya" aria-pressed="true"><span class="ava ava-r">R</span><span class="who"><b>Riya</b><span>Home brewer</span></span><span class="badge" id="badge-riya" hidden></span></button>
+          <button class="contact" type="button" data-tab="cafe" aria-pressed="false"><span class="ava ava-c">TW</span><span class="who"><b>Third Wave Corner</b><span>Cafe, Pune</span></span><span class="badge" id="badge-cafe" hidden></span></button>
+        </div>
+        <div class="phone">
+          <div class="screen">
+            <div class="sb"><span class="num" id="clock">11:12</span><span class="island"></span><span class="icons" aria-hidden="true"><svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx="1" fill="#fff"/><rect x="4.5" y="5" width="3" height="6" rx="1" fill="#fff"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" fill="#fff"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#fff"/></svg><svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3" fill="none" stroke="#fff" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#fff"/><rect x="22.5" y="4" width="1.5" height="4" rx=".75" fill="#fff" opacity=".5"/></svg></span></div>
+            <div class="wa-h">
+              <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="c7" aria-hidden="true">C7</span>
+              <span class="nm"><b>Corridor Seven</b><span>Business account</span></span>
+              <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="wa-b" id="chat" aria-live="polite" aria-label="Chat with Corridor Seven"></div>
+            <div class="wa-f" aria-hidden="true">
+              <span class="field"><svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#8696A0" stroke-width="1.7"/><circle cx="9" cy="10" r="1.2" fill="#8696A0"/><circle cx="15" cy="10" r="1.2" fill="#8696A0"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0" fill="none" stroke="#8696A0" stroke-width="1.7" stroke-linecap="round"/></svg>Message</span>
+              <span class="mic"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="console" id="console" aria-live="polite"></div>
+    </div>
+    <div class="mbar"><span class="hint" id="mhint"></span><button class="btn btn-next" id="next2" type="button">Next day</button></div>
+  </div>
+</section>
+
+<section class="stat" id="why" aria-label="Why it matters" data-rail="Why it matters" data-tone="dark">
+  <div class="wrap">
+    <div data-reveal>
+      <p>You roast 33 tonnes a year for 40,000+ coffee lovers and 350+ cafes. <span>Every one of them runs out on a different day.</span></p>
+      <small>Figures from corridorseven.coffee</small>
+    </div>
+    <figure class="runout" id="runout">
+      <div class="ro-grid" id="roGrid" role="img" aria-label="Sample customers stacked by the day their bag runs out, over four weeks. Roasts happen only on Wednesdays."></div>
+      <div class="ro-axis" id="roAxis" aria-hidden="true"></div>
+      <figcaption><span class="cap"><span id="roN">Sample customers</span> by the day their bag runs out.</span><span class="keys"><span class="k-roast">Roast days</span><span class="k-riya">Riya, from the demo</span></span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="how" id="how" data-rail="How it would run" data-tone="light">
+  <div class="wrap">
+    <h2 data-reveal>How it would run on your store</h2>
+    <p class="lede" data-reveal style="--d:80ms">The demo above runs on sample data. The live version uses the orders you already get on Shopify and a WhatsApp Business number in Corridor Seven's name.</p>
+    <ol class="steps">
+      <li data-reveal style="--d:0ms"><div class="vis" aria-hidden="true"><div class="o-card"><span class="o-id">#C7-10482</span><b>Ratnagiri Peaberry</b><span>250 g, V60 grind</span><span class="pill good">Delivered Sat 24 Oct</span></div></div><span class="n">01</span><h3>An order comes in</h3><p>Bag size, grind and the customer's WhatsApp number arrive with the Shopify order. One question at delivery asks how many cups a day.</p></li>
+      <li data-reveal style="--d:90ms"><div class="vis" aria-hidden="true"><div class="tl-top"><span><b>Sun 1</b> empty</span></div><div class="tline"><i></i><span class="tl-mk rem" style="left:25%"></span><span class="tl-mk roast" style="left:50%"></span><span class="tl-mk arr" style="left:87.5%"></span><span class="tl-mk end" style="left:100%"></span></div><div class="tl-labs"><span style="left:25%"><b>Mon 26</b><br>reminder</span><span style="left:50%"><b>Wed 28</b><br>roast</span><span style="left:87.5%"><b>Sat 31</b><br>new bag</span></div></div><span class="n">02</span><h3>The reminder is timed to your roasts</h3><p>Grams a day, your roast days and delivery time decide the date, so the next bag arrives before the last one is empty.</p></li>
+      <li data-reveal style="--d:180ms"><div class="vis" aria-hidden="true"><div class="mini-wa"><div class="mb">Your Ratnagiri runs out around Sun 1 Nov. Reorder for Wednesday's roast?</div><div class="mq"><span>Reorder same</span><span>Pause</span></div></div></div><span class="n">03</span><h3>One reply on WhatsApp</h3><p>Reorder, try another coffee or pause, with UPI payment. Cafes confirm their usual order the same way.</p></li>
+      <li data-reveal style="--d:270ms"><div class="vis" aria-hidden="true"><div class="mini-bars"><div><span>LEAN Blend</span><em><i style="width:35%;background:var(--conf)"></i><i style="width:65%;background:var(--exp)"></i></em><b>27 kg</b></div><div><span>Cold Brew</span><em><i style="width:8%;background:var(--conf)"></i><i style="width:26%;background:var(--exp)"></i></em><b>9 kg</b></div><div><span>Ratnagiri</span><em><i style="width:15%;background:var(--conf)"></i><i style="width:10%;background:var(--exp)"></i></em><b>6.75 kg</b><span class="chip">+0.25 kg, Riya</span></div></div></div><span class="n">04</span><h3>The roast plan updates itself</h3><p>Every reply becomes a Shopify order and adds its kilos to the right roast, with expected orders shown beside confirmed ones.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="ask" id="ask" aria-label="Next step" data-rail="Next step" data-tone="orange">
+  <div class="wrap">
+    <div data-reveal>
+      <h2>Want to see this on your real orders?</h2>
+      <p>I set up the Shopify link, the WhatsApp Business account and its message templates, and I look after it once it's live.</p>
+    </div>
+    <div class="ask-act" data-reveal style="--d:120ms">
+      <a class="btn btn-ink" href="mailto:asharma53858@gmail.com?subject=Corridor%20Seven%20WhatsApp%20reorders">Book a 20-minute call<svg class="arr" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <span class="mail"><code id="mailTxt">asharma53858@gmail.com</code><button class="copy" type="button" data-copy="#mailTxt">Copy</button></span>
+      <span class="ask-links"><a href="/dashboard">Open the roastery dashboard</a><a href="/dev">See how it's built</a></span>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <a class="mark" href="/">Corridor Seven</a>
+    <nav aria-label="Footer"><a href="/">Live demo</a><a href="/dashboard">Roastery dashboard</a><a href="/dev">Under the hood</a><a href="/#ask">Book a call</a></nav>
+    <span class="fine">Concept demo by Akshit Sharma. Coffee names and prices are from corridorseven.coffee. Customers, cafes and orders are sample data.</span>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/demo.js" defer></script>
+</body>
+</html>

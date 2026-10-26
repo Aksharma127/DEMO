@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Under the hood · Corridor Seven</title>
+<meta name="description" content="For developers: how the WhatsApp reorder demo would run on Shopify webhooks, the WhatsApp Cloud API and Razorpay payment links.">
+<meta name="theme-color" content="#000000">
+<meta name="author" content="Akshit Sharma">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Corridor Seven reorders, a working concept">
+<meta property="og:title" content="Under the hood · Corridor Seven">
+<meta property="og:description" content="For developers: how the WhatsApp reorder demo would run on Shopify webhooks, the WhatsApp Cloud API and Razorpay payment links.">
+<meta property="og:image" content="/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Know when every customer will run out of coffee. A working demo for Corridor Seven.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/archivo-latin-wdth.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/dev.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu"><span></span></button>
+    <a class="mark" href="/">Corridor Seven</a>
+    <span class="concept">Concept<span class="by"> by Akshit Sharma</span></span>
+    <nav class="hnav" aria-label="Pages"><a href="/">Live demo</a><a href="/dashboard">Roastery dashboard</a><a href="/dev" aria-current="page">Under the hood</a></nav>
+    <span class="top-sp"></span>
+    <a class="btn btn-line" href="/#ask">Book a call</a>
+  </div>
+</header>
+
+<main id="main">
+<section class="stage" id="map-sec" data-subnav="System map">
+  <div class="wrap">
+    <h1>What runs behind the chat</h1>
+    <p class="lede">For your developers. One small service sits between your Shopify store, WhatsApp and a payment link. Your store stays the source of truth for orders and customers.</p>
+    <ul class="stack" aria-label="Parts used">
+      <li>Shopify webhooks and Admin API</li><li>WhatsApp Cloud API</li><li>Razorpay payment links for UPI</li><li>Python (FastAPI) or Node</li><li>Postgres</li><li>Runs on the cloud your team already uses</li>
+    </ul>
+    <div class="map-box">
+      <svg class="map" id="map" viewBox="0 0 1120 470" role="img" aria-label="System map: Shopify sends orders to the reorder service, which messages customers through the WhatsApp Cloud API, takes payment through Razorpay, creates the order back in Shopify and updates the roast plan.">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6A6A6A"/></marker>
+          <marker id="arh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#FF6900"/></marker>
+        </defs>
+        <path id="p1" class="edge" d="M260 80 H330 Q350 80 350 100 V200 Q350 215 365 215 H398" marker-end="url(#ar)"/>
+        <path id="p8" class="edge" d="M398 285 H190 Q170 285 170 265 V122" marker-end="url(#ar)"/>
+        <path id="p2" class="edge" d="M535 312 V358" marker-end="url(#ar)"/>
+        <path id="p5" class="edge" d="M585 360 V314" marker-end="url(#ar)"/>
+        <path id="p3" class="edge" d="M398 388 H262" marker-end="url(#ar)"/>
+        <path id="p4" class="edge" d="M262 414 H398" marker-end="url(#ar)"/>
+        <path id="p6" class="edge" d="M722 200 H950 Q970 200 970 180 V122" marker-end="url(#ar)"/>
+        <path id="p7" class="edge" d="M905 122 V158 Q905 170 893 170 H724" marker-end="url(#ar)"/>
+        <path id="p9" class="edge" d="M722 262 H858" marker-end="url(#ar)"/>
+
+        <text class="lab" id="l1" x="268" y="70">order webhooks</text>
+        <text class="lab" id="l8" x="196" y="277">orderCreate, paid</text>
+        <text class="lab" id="l2" x="400" y="342" text-anchor="start">template</text>
+        <text class="lab" id="l5" x="594" y="342">reply webhook</text>
+        <text class="lab" id="l3" x="270" y="380">message</text>
+        <text class="lab" id="l4" x="270" y="436">taps a reply</text>
+        <text class="lab" id="l6" x="742" y="216">payment link</text>
+        <text class="lab" id="l7" x="742" y="162">payment.captured</text>
+        <text class="lab" id="l9" x="736" y="254">+0.25 kg</text>
+
+        <g class="node" id="n-shop"><rect x="40" y="40" width="220" height="82" rx="12"/><text class="nm" x="58" y="74">Shopify store</text><text class="sb" x="58" y="96">Orders, customers, products</text></g>
+        <g class="node" id="n-pay"><rect x="860" y="40" width="220" height="82" rx="12"/><text class="nm" x="878" y="74">Razorpay</text><text class="sb" x="878" y="96">UPI payment links</text></g>
+        <g class="node core" id="n-svc"><rect x="400" y="160" width="320" height="152" rx="14"/><text class="nm" x="420" y="192">Reorder service</text><text class="sb" x="420" y="218">Run-out and reminder rules</text><text class="sb" x="420" y="240">Scheduler, 9 am IST</text><text class="sb" x="420" y="262">Cafe weekly checks, 8:30 am</text><text class="sb" x="420" y="284">Postgres: phone, coffee, cups, dates</text></g>
+        <g class="node" id="n-dash"><rect x="860" y="222" width="220" height="82" rx="12"/><text class="nm" x="878" y="256">Roast plan</text><text class="sb" x="878" y="278">Dashboard for the roastery</text></g>
+        <g class="node" id="n-cust"><rect x="40" y="360" width="220" height="82" rx="12"/><text class="nm" x="58" y="394">Customer's WhatsApp</text><text class="sb" x="58" y="416">Riya, or a cafe owner</text></g>
+        <g class="node" id="n-wa"><rect x="400" y="360" width="320" height="82" rx="12"/><text class="nm" x="420" y="394">WhatsApp Cloud API</text><text class="sb" x="420" y="416">Corridor Seven's business number</text></g>
+
+        <g id="packets"></g>
+      </svg>
+    </div>
+    <p class="map-key"><span class="swipe">Scroll the map sideways.</span> The moving dots are messages in flight. Press Play below to follow one order through the system.</p>
+  </div>
+</section>
+
+<nav class="subnav" aria-label="On this page"></nav>
+
+<section class="sec" id="events-sec" data-subnav="Event log">
+  <div class="wrap">
+    <h2 data-reveal>Follow Riya's reorder, event by event</h2>
+    <p class="sub" data-reveal style="--d:80ms">The same week as the demo, as your service would log it. Pick an event to see its payload, or play it through and watch the map above.</p>
+    <div class="inspector" data-reveal style="--d:120ms">
+      <div class="ev-head"><b>Event log</b><span class="sp"><button class="btn ghost" id="reset" type="button">Reset</button><button class="btn play" id="play" type="button">Play the order</button></span></div>
+      <ol class="events" id="events"></ol>
+      <div class="viewer"><div class="vh" id="vh"></div><pre id="json" aria-live="polite"></pre><div class="why" id="why"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="templates" data-subnav="Templates">
+  <div class="wrap">
+    <h2 data-reveal>Message templates</h2>
+    <p class="sub" data-reveal style="--d:80ms">WhatsApp only lets a business start a conversation with a template Meta has approved. These three cover the whole flow. Highlighted parts are filled in per customer.</p>
+    <div class="tpls">
+      <article class="tpl" data-reveal style="--d:0ms">
+        <div class="th"><code>delivery_optin</code><span class="pill good">Utility</span><span class="pill">English</span></div>
+        <div class="wall"><div class="bub">Hi <span class="var">Riya</span>, your <span class="var">Ratnagiri Peaberry</span> was delivered today. Want a message before this bag runs out? We time it to our roast days.</div><div class="btns"><span>Yes please</span><span>No thanks</span></div></div>
+        <div class="tf">Sent when Shopify marks the order delivered. A yes is the customer's opt-in.</div>
+      </article>
+      <article class="tpl" data-reveal style="--d:90ms">
+        <div class="th"><code>reorder_reminder</code><span class="pill warm">Marketing</span><span class="pill">English</span></div>
+        <div class="wall"><div class="bub">Hi <span class="var">Riya</span>, your <span class="var">Ratnagiri</span> runs out around <span class="var">Sun 1 Nov</span>. Our next roast is <span class="var">Wed 28 Oct</span>. Reorder by 6 pm <span class="var">Tue 27 Oct</span> and it reaches you around <span class="var">Sat 31 Oct</span>.</div><div class="btns"><span>Reorder same</span><span>Try something new</span><span>Pause for 2 weeks</span></div></div>
+        <div class="tf">Sent at 9 am IST, two days before the target roast.</div>
+      </article>
+      <article class="tpl" data-reveal style="--d:180ms">
+        <div class="th"><code>cafe_weekly_check</code><span class="pill good">Utility</span><span class="pill">English</span></div>
+        <div class="wall"><div class="bub">Good morning, <span class="var">Third Wave Corner</span>. Your usual <span class="var">5 kg</span> of <span class="var">LEAN Blend</span> for <span class="var">Wednesday</span>'s roast?</div><div class="btns"><span>Yes, send it</span><span>Change quantity</span><span>Skip this week</span></div></div>
+        <div class="tf">Sent at 8:30 am two days before each roast to cafes with a standing order.</div>
+      </article>
+    </div>
+    <p class="note">Meta is likely to class a reminder that suggests buying as Marketing, which costs more per message than Utility. We submit it that way so it doesn't get rejected later. Replies inside 24 hours are free-form and need no template.</p>
+  </div>
+</section>
+
+<section class="sec" id="rules" data-subnav="Timing rules">
+  <div class="wrap">
+    <h2 data-reveal>The timing rules</h2>
+    <p class="sub" data-reveal style="--d:80ms">This is the part that makes a reminder useful instead of annoying. Every number below is a setting your team can change.</p>
+    <div class="rules" data-reveal style="--d:120ms">
+      <div class="formula" aria-label="Formula">
+        <span class="c"># Riya: 250 g bag, V60, 2 cups a day</span><br>
+        <span class="v">grams_a_day</span> = 15 g × 2 cups = <span class="r">30 g</span><br>
+        <span class="v">run_out</span>     = Sat 24 Oct + floor(250 ÷ 30) days = <span class="r">Sun 1 Nov</span><br>
+        <span class="v">roast</span>       = latest Wednesday where roast + 3 days ≤ run_out − 1 = <span class="r">Wed 28 Oct</span><br>
+        <span class="v">remind_at</span>   = roast − 2 days, 09:00 IST = <span class="r">Mon 26 Oct, 9:00 am</span>
+      </div>
+      <ol>
+        <li><span class="i">1</span><span><b>Grams a cup come from the brew method</b><span>V60 15 g, AeroPress 15 g, French press 16 g, espresso 18 g, South Indian filter 10 g.</span></span></li>
+        <li><span class="i">2</span><span><b>Orders close at 6 pm the day before a roast</b><span>A reply after that goes into the next roast, and the customer is told the new date.</span></span></li>
+        <li><span class="i">3</span><span><b>If no roast can make it in time</b><span>The reminder goes for the first possible roast and suggests a bigger bag. At 3 cups a day, 250 g lasts 5 days.</span></span></li>
+        <li><span class="i">4</span><span><b>One follow-up, then quiet</b><span>No reply in 24 hours gets one gentle follow-up. After that, nothing until the next bag.</span></span></li>
+      </ol>
+      <ol>
+        <li><span class="i">5</span><span><b>No double messages</b><span>Customers already on a website subscription are skipped. Each customer has at most one open reminder.</span></span></li>
+        <li><span class="i">6</span><span><b>Cafes keep their usual order by default</b><span>No reply by 6 pm keeps the standing order. SKIP leaves a week out.</span></span></li>
+        <li><span class="i">7</span><span><b>Quiet hours</b><span>Nothing goes out before 9 am or after 8 pm IST.</span></span></li>
+        <li><span class="i">8</span><span><b>STOP works any time</b><span>One word ends all messages for that number, and the opt-out is recorded.</span></span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="yours" data-subnav="What stays yours">
+  <div class="wrap">
+    <h2 data-reveal>What stays yours</h2>
+    <p class="sub" data-reveal style="--d:80ms">Nothing here replaces the tools your team already runs.</p>
+    <div class="own" data-reveal style="--d:120ms">
+      <div><h3>Orders stay in Shopify</h3><p>Every reorder is created as a normal paid Shopify order with a whatsapp-reorder tag, so fulfilment, invoices and reports work as they do today.</p></div>
+      <div><h3>The service keeps very little</h3><p>Phone number, coffee, bag size, cups a day and reminder dates. No card or UPI details ever touch it; Razorpay handles payment.</p></div>
+      <div><h3>Your team can take it over</h3><p>It runs on your cloud account, under your WhatsApp Business number, with the code handed over and documented.</p></div>
+    </div>
+    <div class="cta">
+      <p>Happy to walk your developers through this on a 20-minute call.</p>
+      <a class="btn btn-main" href="/#ask">Book a call<svg class="arr" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="btn ghost" href="/dashboard">Open the roastery dashboard</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <a class="mark" href="/">Corridor Seven</a>
+    <nav aria-label="Footer"><a href="/">Live demo</a><a href="/dashboard">Roastery dashboard</a><a href="/dev">Under the hood</a><a href="/#ask">Book a call</a></nav>
+    <span class="fine">Concept demo by Akshit Sharma. Payloads are trimmed examples with sample data.</span>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/dev.js" defer></script>
+</body>
+</html>

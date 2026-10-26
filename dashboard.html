@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roastery dashboard · Corridor Seven</title>
+<meta name="description" content="The roast plan behind the WhatsApp reorder demo: confirmed and expected kilos per coffee, batches, customer run-out dates and cafe orders.">
+<meta name="theme-color" content="#000000">
+<meta name="author" content="Akshit Sharma">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Corridor Seven reorders, a working concept">
+<meta property="og:title" content="Roastery dashboard · Corridor Seven">
+<meta property="og:description" content="The roast plan behind the WhatsApp reorder demo: confirmed and expected kilos per coffee, batches, customer run-out dates and cafe orders.">
+<meta property="og:image" content="/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Know when every customer will run out of coffee. A working demo for Corridor Seven.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/archivo-latin-wdth.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu"><span></span></button>
+    <a class="mark" href="/">Corridor Seven</a>
+    <span class="concept">Concept<span class="by"> by Akshit Sharma</span></span>
+    <nav class="hnav" aria-label="Pages"><a href="/">Live demo</a><a href="/dashboard" aria-current="page">Roastery dashboard</a><a href="/dev">Under the hood</a></nav>
+    <span class="top-sp"></span>
+    <span class="today" id="today"></span>
+    <a class="btn btn-line" href="/#ask">Book a call</a>
+  </div>
+</header>
+<div class="sync" id="sync"></div>
+<main id="main">
+
+<section class="band" aria-label="Roast summary">
+  <div class="wrap">
+    <div class="band-row">
+      <h1>Roast plan</h1>
+      <div class="days" id="roastDays" role="group" aria-label="Roast day"></div>
+      <div class="band-right">
+        <span id="closes" class="closes"></span>
+        <span id="status"></span>
+        <button class="btn lock" id="lock" type="button" aria-pressed="false">Lock plan</button>
+      </div>
+    </div>
+    <div class="figs">
+      <div class="fig big"><div class="n num"><span data-roll="total">0</span><small>kg</small></div><div class="l">to roast</div></div>
+      <div class="fig sm"><div class="n num"><span data-roll="green">0</span></div><div class="l">kg of green coffee to pull</div></div>
+      <div class="fig sm"><div class="n num"><span data-roll="batches" data-int="1">0</span></div><div class="l">batches on the 12 kg drum</div></div>
+      <div class="fig sm"><div class="n num"><span data-roll="cafes" data-int="1">0</span></div><div class="l">cafes in this roast</div></div>
+    </div>
+    <div class="split">
+      <div class="track" aria-hidden="true"><i class="c-roast" data-w-id="band-c"></i><i class="c-bean" data-w-id="band-e"></i></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap dash">
+  <div class="main">
+    <div class="tabs" role="tablist" aria-label="Views" id="tabs"></div>
+    <div id="panel"></div>
+  </div>
+  <aside class="rail" aria-label="Needs attention and activity">
+    <section><h2>Needs you <span class="pill" id="needCount">0</span></h2><ul class="needs" id="needs"></ul></section>
+    <section><h2>Today on WhatsApp <span class="live">Live</span></h2><ul class="feed" id="feed"></ul></section>
+    <section>
+      <div class="donut">
+        <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="62 percent of reminders became reorders"><circle cx="32" cy="32" r="26" fill="none" stroke="#E2E2DE" stroke-width="8"/><circle id="donutArc" cx="32" cy="32" r="26" fill="none" stroke="#FF6900" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 163.4" transform="rotate(-90 32 32)" style="transition:stroke-dasharray 1s cubic-bezier(.2,.8,.2,1)"/></svg>
+        <div><div class="v num">62%</div><p>of last week's reminders became a reorder. 29 of 47.</p></div>
+      </div>
+    </section>
+  </aside>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <a class="mark" href="/">Corridor Seven</a>
+    <nav aria-label="Footer"><a href="/">Live demo</a><a href="/dashboard">Roastery dashboard</a><a href="/dev">Under the hood</a><a href="/#ask">Book a call</a></nav>
+    <span class="fine">Concept demo by Akshit Sharma. Coffee names are from corridorseven.coffee. Customers, cafes and orders are sample data.</span>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/dashboard.js" defer></script>
+</body>
+</html>
